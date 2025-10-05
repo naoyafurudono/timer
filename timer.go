@@ -55,11 +55,11 @@ func (t *Timer) Lap(messageFormat string, args ...any) {
 func (t *Timer) Print() {
 	fmt.Println("--- Performance Measurement Results ---")
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
-	fmt.Fprintln(w, "Elapsed\tFile\tLine\tMessage")
-	fmt.Fprintln(w, "-------\t----\t----\t-------")
+	fmt.Fprintln(w, "Elapsed\tLocation\tMessage")
+	fmt.Fprintln(w, "-------\t--------\t-------")
 	for _, lap := range t.laps {
 		// 結果をフォーマットして出力
-		fmt.Fprintf(w, "%-15v\t%s\t%d\t%s\n", lap.Duration, lap.File, lap.Line, lap.Message)
+		fmt.Fprintf(w, "%-15v\t%s:%d\t%s\n", lap.Duration, lap.File, lap.Line, lap.Message)
 	}
 	w.Flush() // バッファの内容をフラッシュして出力
 	fmt.Println("---------------------------------------")
