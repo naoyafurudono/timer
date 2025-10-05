@@ -1,6 +1,7 @@
 package timer
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -63,4 +64,33 @@ func (t *Timer) Print() {
 	}
 	w.Flush() // バッファの内容をフラッシュして出力
 	fmt.Println("---------------------------------------")
+}
+
+// PrintJSON は計測結果を1行のJSON形式で標準出力に表示します。
+func (t *Timer) PrintJSON() {
+	type lapJSON struct {
+		File     string `json:"file"`
+		Line     int    `json:"line"`
+		Message  string `json:"message"`
+		Duration string `json:"duration"`
+	}
+
+	lapsJSON := make([]lapJSON, len(t.laps))
+	for i, lap := range t.laps {
+		lapsJSON[i] = lapJSON{
+			File:     lap.File,
+			Line:     lap.Line,
+			Message:  lap.Message,
+			Duration: lap.Duration.String(),
+		}
+	}
+
+	data, err := json.Marshal(map[string]any{
+		"laps": lapsJSON,
+	})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to marshal JSON: %v\n", err)
+		return
+	}
+	fmt.Println(string(data))
 }

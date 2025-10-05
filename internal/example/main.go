@@ -27,4 +27,7 @@ func main() {
 
 	// Print the results
 	t.Print()
+
+	// Print JSON format
+	t.PrintJSON()
 }
