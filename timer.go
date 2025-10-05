@@ -20,13 +20,15 @@ type Lap struct {
 
 // Timer は処理時間計測の本体となる構造体です。
 type Timer struct {
+	name      string
 	startTime time.Time
 	laps      []Lap
 }
 
 // New は新しいタイマーを作成し、計測を開始します。
-func New() *Timer {
+func New(name string) *Timer {
 	return &Timer{
+		name:      name,
 		startTime: time.Now(),
 		laps:      []Lap{},
 	}
@@ -54,7 +56,8 @@ func (t *Timer) Lap(messageFormat string, args ...any) {
 // Print は計測結果を整形して標準出力に表示します。
 // text/tabwriter を利用して、結果を見やすく整形します。
 func (t *Timer) Print() {
-	fmt.Println("--- Performance Measurement Results ---")
+	fmt.Println("--- Performance Measurement Results for", "---")
+	fmt.Println("name: ", t.name)
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
 	fmt.Fprintln(w, "Elapsed\tLocation\tMessage")
 	fmt.Fprintln(w, "-------\t--------\t-------")
@@ -86,6 +89,7 @@ func (t *Timer) PrintJSON() {
 	}
 
 	data, err := json.Marshal(map[string]any{
+		"name": t.name,
 		"laps": lapsJSON,
 	})
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 
 func main() {
 	// Create a new timer
-	t := timer.New()
+	t := timer.New("example")
 
 	// Simulate some processing
 	t.Lap("Start processing")
